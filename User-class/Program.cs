@@ -7,15 +7,15 @@ static void Main(string[] args)
 
     for (int i = 0; i < users.Length; i++)
     {
-        Console.WriteLine($"Enter details for user {i + 1}:");
+        Console.WriteLine($"detallari daxil et: {i + 1}:");
 
-        Console.Write("Fullname: ");
+        Console.Write("Ad: ");
         string fullname = Console.ReadLine();
 
         Console.Write("Email: ");
         string email = Console.ReadLine();
 
-        Console.Write("Password: ");
+        Console.Write("Sifre: ");
         string password = Console.ReadLine();
 
         users[i] = new User(fullname, email, password);
@@ -25,11 +25,11 @@ static void Main(string[] args)
     do
     {
         Console.WriteLine("\nMenu:");
-        Console.WriteLine("1. Show all students");
-        Console.WriteLine("2. Get info by id");
-        Console.WriteLine("0. Quit");
+        Console.WriteLine("1. hamisini goster");
+        Console.WriteLine("2. id ile melumat");
+        Console.WriteLine("0. cixis");
 
-        Console.Write("choice: ");
+        Console.Write("secim: ");
         choice = Convert.ToInt32(Console.ReadLine());
 
         switch (choice)
@@ -41,10 +41,10 @@ static void Main(string[] args)
                 GetInfoById(users);
                 break;
             case 0:
-                Console.WriteLine("Exiting program...");
+                Console.WriteLine("Programdan cixdi...");
                 break;
             default:
-                Console.WriteLine("Invalid choice. Please try again.");
+                Console.WriteLine("yeniden daxil edin.");
                 break;
         }
     } while (choice != 0);
@@ -52,7 +52,7 @@ static void Main(string[] args)
 
 static void ShowAllUsers(User[] users)
 {
-    Console.WriteLine("\nAll users:");
+    Console.WriteLine("\nButun istifadeciler:");
     foreach (User user in users)
     {
         user.GetInfo();
@@ -61,7 +61,7 @@ static void ShowAllUsers(User[] users)
 
 static void GetInfoById(User[] users)
 {
-    Console.Write("Enter user id: ");
+    Console.Write("istifadeci id-sin daxil et: ");
     int id = Convert.ToInt32(Console.ReadLine());
 
     User user = User.FindUserById(users, id);
@@ -71,6 +71,6 @@ static void GetInfoById(User[] users)
     }
     else
     {
-        Console.WriteLine("User not found with the provided id.");
+        Console.WriteLine("tapilmadi.");
     }
 }
