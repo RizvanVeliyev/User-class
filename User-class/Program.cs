@@ -1,76 +1,86 @@
 ﻿
-using User_class;
-
-static void Main(string[] args)
+namespace User_class;
+internal class Program
 {
-    User[] users = new User[3];
-
-    for (int i = 0; i < users.Length; i++)
+    static void Main(string[] args)
     {
-        Console.WriteLine($"detallari daxil et: {i + 1}:");
 
-        Console.Write("Ad: ");
-        string fullname = Console.ReadLine();
-
-        Console.Write("Email: ");
-        string email = Console.ReadLine();
-
-        Console.Write("Sifre: ");
-        string password = Console.ReadLine();
-
-        users[i] = new User(fullname, email, password);
-    }
-
-    int choice;
-    do
-    {
-        Console.WriteLine("\nMenu:");
-        Console.WriteLine("1. hamisini goster");
-        Console.WriteLine("2. id ile melumat");
-        Console.WriteLine("0. cixis");
-
-        Console.Write("secim: ");
-        choice = Convert.ToInt32(Console.ReadLine());
-
-        switch (choice)
+        User[] users = new User[3];
+        for (int i = 0; i < users.Length; i++)
         {
-            case 1:
-                ShowAllUsers(users);
-                break;
-            case 2:
-                GetInfoById(users);
-                break;
-            case 0:
-                Console.WriteLine("Programdan cixdi...");
-                break;
-            default:
-                Console.WriteLine("yeniden daxil edin.");
-                break;
+            Console.WriteLine($"Enter details for user {i + 1}:");
+
+            Console.Write("Fullname: ");
+            string fullname = Console.ReadLine();
+
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+
+            string password;
+            while (true)
+            {
+                Console.Write("Password: ");
+                password = Console.ReadLine();
+
+                if (new User("", "", "").PasswordChecker(password))
+                {
+                    users[i] = new User(fullname, email, password);
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Password does not meet the required criteria. Please try again.");
+                }
+            }
         }
-    } while (choice != 0);
-}
 
-static void ShowAllUsers(User[] users)
-{
-    Console.WriteLine("\nButun istifadeciler:");
-    foreach (User user in users)
-    {
-        user.GetInfo();
+        while (true)
+        {
+            Console.WriteLine("\nMenu:");
+            Console.WriteLine("1. Show all students");
+            Console.WriteLine("2. Get info by id");
+            Console.WriteLine("0. Quit");
+            Console.Write("Select an option: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    foreach (var user in users)
+                    {
+                        user.GetInfo();
+                    }
+                    break;
+
+                case "2":
+                    Console.Write("Enter user id: ");
+                    if (int.TryParse(Console.ReadLine(), out int id))
+                    {
+                        User user = User.FindUserById(users, id);
+                        if (user != null)
+                        {
+                            user.GetInfo();
+                        }
+                        else
+                        {
+                            Console.WriteLine("User not found.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid id format.");
+                    }
+                    break;
+
+                case "0":
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid option. Please try again.");
+                    break;
+            }
+        }
     }
 }
 
-static void GetInfoById(User[] users)
-{
-    Console.Write("istifadeci id-sin daxil et: ");
-    int id = Convert.ToInt32(Console.ReadLine());
-
-    User user = User.FindUserById(users, id);
-    if (user != null)
-    {
-        user.GetInfo();
-    }
-    else
-    {
-        Console.WriteLine("tapilmadi.");
-    }
-}

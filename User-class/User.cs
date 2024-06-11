@@ -1,69 +1,52 @@
 ﻿
 
-namespace User_class
+namespace User_class;
+public class User
 {
-    internal class User
+    private static int _idCounter = 0;
+    public int Id { get; private set; }
+    public string Fullname { get; set; }
+    public string Email { get; set; }
+    private string _password;
+
+    public string Password
     {
-        private static int nextId = 1;
-
-        public int Id { get; }
-        public string Fullname { get; }
-        public string Email { get; }
-
-        public User(string fullname, string email, string password)
+        get { return _password; }
+        set
         {
-            Id = nextId++;
-            Fullname = fullname;
-            Email = email;
-
-            if (!PasswordChecker(password))
+            if (PasswordChecker(value))
             {
-                Console.WriteLine("Sifre yalnisdi");
-                while (!PasswordChecker(password))
-                {
-                    Console.Write("Sifreni yeniden daxil edin:");
-                    password = Console.ReadLine();
-                }
+                _password = value;
             }
 
-            Console.WriteLine("istifadeci yaradildi!");
-        }
-
-        public bool PasswordChecker(string password)
-        {
-            if (password.Length < 8)
-                return false;
-
-            bool hasUpperCase = false;
-            bool hasLowerCase = false;
-            bool hasDigit = false;
-
-            foreach (char c in password)
-            {
-                if (char.IsUpper(c))
-                    hasUpperCase = true;
-                else if (char.IsLower(c))
-                    hasLowerCase = true;
-                else if (char.IsDigit(c))
-                    hasDigit = true;
-            }
-
-            return hasUpperCase && hasLowerCase && hasDigit;
-        }
-
-        public void GetInfo()
-        {
-            Console.WriteLine($"Id: {Id}, Fullname: {Fullname}, Email: {Email}");
-        }
-
-        public static User FindUserById(User[] users, int id)
-        {
-            foreach (User user in users)
-            {
-                if (user.Id == id)
-                    return user;
-            }
-            return null;
         }
     }
+
+    public User(string fullname, string email, string password)
+    {
+        Id = ++_idCounter;
+        Fullname = fullname;
+        Email = email;
+        Password = password;
+    }
+
+    public bool PasswordChecker(string password)
+    {
+        if (password.Length < 8) return false;
+        if (!password.Any(char.IsUpper)) return false;
+        if (!password.Any(char.IsLower)) return false;
+        if (!password.Any(char.IsDigit)) return false;
+        return true;
+    }
+
+    public void GetInfo()
+    {
+        Console.WriteLine($"ID: {Id}, Fullname: {Fullname}, Email: {Email}");
+    }
+
+    public static User FindUserById(User[] users, int id)
+    {
+        return users.FirstOrDefault(user => user.Id == id);
+    }
 }
+
