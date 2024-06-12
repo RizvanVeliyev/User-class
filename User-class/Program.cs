@@ -2,17 +2,15 @@
 namespace User_class;
 internal class Program
 {
-    static void Main(string[] args)
+    public static void Main()
     {
-
         User[] users = new User[3];
+
         for (int i = 0; i < users.Length; i++)
         {
-            Console.WriteLine($"Enter details for user {i + 1}:");
-
+            Console.WriteLine($"Enter {i + 1}.user:");
             Console.Write("Fullname: ");
             string fullname = Console.ReadLine();
-
             Console.Write("Email: ");
             string email = Console.ReadLine();
 
@@ -21,66 +19,49 @@ internal class Program
             {
                 Console.Write("Password: ");
                 password = Console.ReadLine();
-
-                if (new User("", "", "").PasswordChecker(password))
+                if (User.PasswordChecker(password))
                 {
-                    users[i] = new User(fullname, email, password);
                     break;
                 }
                 else
                 {
-                    Console.WriteLine("Password does not meet the required criteria. Please try again.");
+                    Console.WriteLine("wrong password.");
                 }
             }
+
+            users[i] = new User(fullname, email, password);
         }
 
         while (true)
         {
             Console.WriteLine("\nMenu:");
-            Console.WriteLine("1. Show all students");
-            Console.WriteLine("2. Get info by id");
-            Console.WriteLine("0. Quit");
-            Console.Write("Select an option: ");
+            Console.WriteLine("1. Show all students,2. Get info by id,0. Quit:");
+            
+            string option = Console.ReadLine();
 
-            string choice = Console.ReadLine();
-
-            switch (choice)
+            if (option == "0") break;
+            
+            else if (option == "1")
             {
-                case "1":
-                    foreach (var user in users)
-                    {
-                        user.GetInfo();
-                    }
-                    break;
-
-                case "2":
-                    Console.Write("Enter user id: ");
-                    if (int.TryParse(Console.ReadLine(), out int id))
-                    {
-                        User user = User.FindUserById(users, id);
-                        if (user != null)
-                        {
-                            user.GetInfo();
-                        }
-                        else
-                        {
-                            Console.WriteLine("User not found.");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid id format.");
-                    }
-                    break;
-
-                case "0":
-                    return;
-
-                default:
-                    Console.WriteLine("Invalid option. Please try again.");
-                    break;
+                foreach (var user in users)
+                {
+                    user.GetInfo();
+                }
+            }
+            else if (option == "2")
+            {
+                Console.Write("Enter user ID: ");
+                int id;
+                id = int.Parse(Console.ReadLine());
+                User.FindUserById(id, users);
+            }
+            else
+            {
+                Console.WriteLine("user cant found");
             }
         }
     }
+
+    
 }
 

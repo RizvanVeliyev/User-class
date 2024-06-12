@@ -1,52 +1,75 @@
 ﻿
 
 namespace User_class;
+using System;
+
 public class User
 {
-    private static int _idCounter = 0;
-    public int Id { get; private set; }
-    public string Fullname { get; set; }
-    public string Email { get; set; }
-    private string _password;
-
-    public string Password
+    private static int idCount = 0;
+    private int id;
+    public int Id
     {
-        get { return _password; }
-        set
-        {
-            if (PasswordChecker(value))
-            {
-                _password = value;
-            }
-
-        }
+        get { return id; }
     }
+    public string Fullname { get; set; }
+    public string Email { get; private set; }
+    private string password;
 
     public User(string fullname, string email, string password)
     {
-        Id = ++_idCounter;
+        id = ++idCount;
         Fullname = fullname;
         Email = email;
-        Password = password;
+        if (PasswordChecker(password))
+        {
+            this.password = password;
+        }
+        else
+        {
+            Console.WriteLine("wrong password!");
+        }
     }
 
-    public bool PasswordChecker(string password)
+    public static bool PasswordChecker(string password)
     {
-        if (password.Length < 8) return false;
-        if (!password.Any(char.IsUpper)) return false;
-        if (!password.Any(char.IsLower)) return false;
-        if (!password.Any(char.IsDigit)) return false;
-        return true;
+        if (password.Length < 8)
+            return false;
+
+        bool hasUpper = false, hasLower = false, hasDigit = false;
+
+        foreach (char c in password)
+        {
+            if (char.IsUpper(c))
+                hasUpper = true;
+            if (char.IsLower(c))
+                hasLower = true;
+            if (char.IsDigit(c))
+                hasDigit = true;
+        }
+
+        return hasUpper && hasLower && hasDigit;
     }
 
     public void GetInfo()
     {
-        Console.WriteLine($"ID: {Id}, Fullname: {Fullname}, Email: {Email}");
+        Console.WriteLine($"Id: {Id}, Fullname: {Fullname}, Email: {Email}");
     }
 
-    public static User FindUserById(User[] users, int id)
+    public static User FindUserById(int id, User[] users)
     {
-        return users.FirstOrDefault(user => user.Id == id);
+        foreach (var user in users)
+        {
+            if (user != null && user.Id == id)
+            {
+                Console.WriteLine($"Id: {user.Id}, Fullname: {user.Fullname}, Email: {user.Email}");
+                return user;
+            }
+        }
+        Console.WriteLine("cant found user");
+        return null;
     }
 }
+
+
+
 
